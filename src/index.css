@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-blue-300;
+  background-image: radial-gradient(rgb(0, 0, 0) 1px, transparent 0);
+  background-size: 40px 40px;
+  background-position: -19px -19px;
+}
+
+.stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #22c55e,
+    #22c55e 10px,
+    #16a34a 11px,
+    #16a34a 20px
+  );
+}
