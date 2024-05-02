@@ -73,5 +73,5 @@ export function Audio() {
     };
   }, [audioRef, setProgress, setVolume]);
 
-  return <audio ref={audioRef} src='/karamell.mp3' />;
+  return <audio ref={audioRef} src='karamell.mp3' />;
 }
