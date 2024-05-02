@@ -29,13 +29,13 @@ export function Button({
     >
       <div
         className={cn(`${text} ${bg} rounded-sm transition-all px-4 py-2  border border-black shadow-hard
-                  group-hover:shadow-hard-focus group-hover:translate-x-[3px] group-hover:translate-y-[3px]
-                  group-focus-visible:shadow-hard-focus group-focus-visible:translate-x-[3px] group-focus-visible:translate-y-[3px]
-                  group-focus-visible::border-white
-                  group-active:shadow-hard-active group-active:brightness-95
-                  ${className} 
-                  
-        `)}
+                group-hover:shadow-hard-focus group-hover:translate-x-[3px] group-hover:translate-y-[3px]
+                group-focus-visible:shadow-hard-focus group-focus-visible:translate-x-[3px] group-focus-visible:translate-y-[3px]
+                group-focus-visible::border-white
+                group-active:shadow-hard-active group-active:brightness-95
+                ${className}
+
+      `)}
       >
         <div className='transition-transform group-active:translate-y-[1px] group-active:translate-x-[1px]'>
           {children}

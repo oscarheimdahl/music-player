@@ -1,10 +1,11 @@
 import { useAtom } from 'jotai';
 import { useEffect, useState, MouseEvent } from 'react';
-import { audioAtom } from '../utils/store';
+import { audioRefAtom, progressAtom } from '../utils/store';
 
-const ProgressBar = () => {
+export const ProgressBar = () => {
   const [mouseDown, setMouseDown] = useState(false);
-  const [audio] = useAtom(audioAtom);
+  const [audioRef] = useAtom(audioRefAtom);
+  const [audioProgress] = useAtom(progressAtom);
 
   useEffect(() => {
     const handleMouseUp = () => setMouseDown(false);
@@ -18,35 +19,35 @@ const ProgressBar = () => {
     e: MouseEvent<HTMLDivElement>,
     dragging: boolean = false
   ) {
-    if (!audio.ref) return;
+    if (!audioRef) return;
     if (dragging && !mouseDown) return;
 
     const { clientX, currentTarget } = e;
     const { width, left } = currentTarget.getBoundingClientRect();
     const clickX = clientX - left;
     const percentage = (clickX / width) * 100;
-    audio.ref.currentTime = (audio.ref.duration * percentage) / 100;
+    audioRef.currentTime = (audioRef.duration * percentage) / 100;
   }
+  let progress = audioProgress;
+  if (progress < 0.5) progress = 0;
+  if (progress > 99) progress = 100;
 
   return (
     <div
       onMouseDown={() => setMouseDown(true)}
       onMouseMove={(e) => handleClick(e, true)}
       onClick={handleClick}
-      className='border border-black border-1 w-full h-8 rounded-sm overflow-hidden'
+      className='group border border-black border-1 w-full h-8 rounded-sm hover:cursor-pointer'
     >
       <div
-        className={`bg-emerald-500 h-full border-r border-black
-        ${audio.progress > 99.8 ? 'border-none' : 'border-1'}
-        ${audio.progress < 0.2 ? 'border-none' : 'border-1'}
+        className={`bg-emerald-500 dotted h-full ring-1 ring-black rounded-sm  
+        ${progress === 0 ? 'ring-transparent transition-none' : ''}
+  
         `}
         style={{
-          width: `${audio.progress}%`,
-          animationPlayState: audio.playing ? 'running' : 'paused',
+          width: `${progress}%`,
         }}
       ></div>
     </div>
   );
 };
-
-export default ProgressBar;

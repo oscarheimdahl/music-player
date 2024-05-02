@@ -1,16 +1,25 @@
 import { useEffect, useRef } from 'react';
-import { audioAtom } from '../utils/store';
+import {
+  audioRefAtom,
+  playingAtom,
+  progressAtom,
+  volumeAtom,
+} from '../utils/store';
 import { useAtom } from 'jotai';
 
 export function Audio() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [audio, setAudio] = useAtom(audioAtom);
+  const [, setStoreAudioRef] = useAtom(audioRefAtom);
+  const [, setProgress] = useAtom(progressAtom);
+  const [, setPlaying] = useAtom(playingAtom);
+  const [volume, setVolume] = useAtom(volumeAtom);
 
   useEffect(() => {}, []);
 
   useEffect(() => {
     if (!audioRef.current) return;
-    setAudio({ ...audio, ref: audioRef.current });
+    audioRef.current.volume = volume;
+    setStoreAudioRef(audioRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioRef]);
 
@@ -19,11 +28,11 @@ export function Audio() {
     const currentRef = audioRef.current;
 
     const handleStateChangePlay = () => {
-      setAudio({ ...audio, playing: true });
+      setPlaying(true);
     };
 
     const handleStateChangePause = () => {
-      setAudio({ ...audio, playing: false });
+      setPlaying(false);
     };
 
     currentRef.addEventListener('play', handleStateChangePlay);
@@ -32,7 +41,7 @@ export function Audio() {
       currentRef.removeEventListener('play', handleStateChangePlay);
       currentRef.removeEventListener('pause', handleStateChangePause);
     };
-  }, [audio, audioRef, setAudio]);
+  }, [audioRef, setPlaying]);
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -40,14 +49,29 @@ export function Audio() {
 
     const handleTimeUpdate = () => {
       const { currentTime, duration } = currentRef;
-      setAudio({ ...audio, progress: (currentTime / duration) * 100 });
+      setProgress((currentTime / duration) * 100);
     };
 
     currentRef.addEventListener('timeupdate', handleTimeUpdate);
     return () => {
       currentRef.removeEventListener('timeupdate', handleTimeUpdate);
     };
-  }, [audio, audioRef, setAudio]);
+  }, [audioRef, setProgress]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    const currentRef = audioRef.current;
+
+    const handleVolumeChange = () => {
+      const { volume } = currentRef;
+      setVolume(volume);
+    };
+
+    currentRef.addEventListener('volumechange', handleVolumeChange);
+    return () => {
+      currentRef.removeEventListener('volumechange', handleVolumeChange);
+    };
+  }, [audioRef, setProgress, setVolume]);
 
   return <audio ref={audioRef} src='/karamell.mp3' />;
 }

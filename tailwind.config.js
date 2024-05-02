@@ -11,6 +11,9 @@ export default {
       fontFamily: {
         fun: ['Quicksand', 'sans-serif'], // Caveat Delius
       },
+      transitionProperty: {
+        'shadow-transform': 'box-shadow, transform',
+      },
     },
   },
   plugins: [],

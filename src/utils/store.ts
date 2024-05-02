@@ -1,13 +1,6 @@
 import { atom } from 'jotai';
 
-type AudioAtom = {
-  playing: boolean;
-  progress: number;
-  ref: HTMLAudioElement | null;
-};
-
-export const audioAtom = atom<AudioAtom>({
-  playing: false,
-  progress: 0,
-  ref: null,
-});
+export const audioRefAtom = atom<HTMLAudioElement | null>(null);
+export const playingAtom = atom(false);
+export const progressAtom = atom(0);
+export const volumeAtom = atom(0.5);
