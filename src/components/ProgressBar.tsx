@@ -20,6 +20,7 @@ export const ProgressBar = () => {
     dragging: boolean = false
   ) {
     if (!audioRef) return;
+    if (isNaN(audioRef.duration)) return;
     if (dragging && !mouseDown) return;
 
     const { clientX, currentTarget } = e;
